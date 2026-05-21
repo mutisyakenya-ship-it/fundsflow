@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
   function Registration(){
+    const { register } = useAuth();
+    const navigate = useNavigate();
     const heroStyle = {
         minHeight: "100vh",
         display: "flex",
@@ -296,7 +300,19 @@ const handleCountryChange = (e) => {
          { alert("Invalid password!"); return; }
         else if (formData.password !== formData.confirmPassword) 
            { alert("Passwords do not match!"); return; };
+     
+     // Register user and store their data
+     register({
+       firstname: formData.firstname,
+       lastname: formData.lastname,
+       username: formData.username,
+       email: formData.email,
+       country: formData.country,
+       phone: formData.phone
+     });
+     
      alert("Registration successful!");
+     navigate("/dashboard");
     };
     return(
         <section style={heroStyle}>

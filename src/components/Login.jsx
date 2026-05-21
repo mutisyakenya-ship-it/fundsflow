@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
@@ -16,7 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-function Login({ setIsAuthenticated }) {
+function Login() {
+const { login } = useAuth();
 const [loginData, setlogData] = useState({
     email:"",
     password:"",
@@ -95,16 +97,16 @@ const handleSubmit = (e) => {
     }
     setError(newError);
     if (Object.keys(newError).length === 0) {
-        alert("login successful");
-        setIsAuthenticated(true);
+        alert("Login successful");
+        login({ email: loginData.email });
         navigate("/dashboard");
     }
 };
 
 const handleGoogleLogin = async () => {
     try {
-        await signInWithPopup(auth, new GoogleAuthProvider());
-        setIsAuthenticated(true);
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        login({ email: result.user.email, name: result.user.displayName });
         navigate("/dashboard");
     } catch (error) {
         console.error(error);
@@ -113,8 +115,8 @@ const handleGoogleLogin = async () => {
 
 const handleFacebookLogin = async () => {
     try {
-        await signInWithPopup(auth, new FacebookAuthProvider());
-        setIsAuthenticated(true);
+        const result = await signInWithPopup(auth, new FacebookAuthProvider());
+        login({ email: result.user.email, name: result.user.displayName });
         navigate("/dashboard");
     } catch (error) {
         console.error(error);
@@ -123,8 +125,8 @@ const handleFacebookLogin = async () => {
 
 const handleGithubLogin = async () => {
     try {
-        await signInWithPopup(auth, new GithubAuthProvider());
-        setIsAuthenticated(true);
+        const result = await signInWithPopup(auth, new GithubAuthProvider());
+        login({ email: result.user.email, name: result.user.displayName });
         navigate("/dashboard");
     } catch (error) {
         console.error(error);

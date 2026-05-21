@@ -1,12 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import {  useState,useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {  useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import block from "../assets/block.jpg";
 import header from "../assets/header.jpg";
 
 
-function Navbar  ({isAuthenticated})  {
+function Navbar() {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
     const [isMobile, setIsMobile] = useState(false);
+    
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth <= 768);
@@ -15,6 +19,12 @@ function Navbar  ({isAuthenticated})  {
         handleResize();
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    };
+
     const style = {
 navbar: {
     display: "flex",
@@ -77,14 +87,23 @@ logo: {
             <h2 style={style.logo}>FUNDFLOW DAO</h2>
 
             <div style={style.navLinks}>
-                <Link to="/" style={style.link}>Home</Link>
+                <Link to="/dashboard" style={style.link}>Dashboard</Link>
                 <Link to="/about" style={style.link}>About</Link>
                 <Link to="/contact" style={style.link}>Contact</Link>
-                {isAuthenticated ? (
-                    <>
-                        <Link to="/dashboard" style={style.link}>Dashboard</Link>
-                    </>
-                ) : null}
+            </div>
+
+            <div style={style.rightButtons}>
+                <button 
+                    onClick={handleLogout}
+                    style={{
+                        ...style.button,
+                        backgroundColor: "gold",
+                        color: "black",
+                        fontWeight: "bold"
+                    }}
+                >
+                    Logout
+                </button>
             </div>
         </nav>
     );

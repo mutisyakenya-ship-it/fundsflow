@@ -3,6 +3,8 @@ import approval from "../assets/approval.jpg";
 import graphic from "../assets/graphic.jpg";
 import coin from "../assets/coin.jpg";
 import ladder from "../assets/ladder.jpg";
+import Submit from "../components/Submit";
+
 function Dashboard() {
     const boxStyle = { padding: "20px", backgroundColor: "rgb(227, 231, 236)", borderRadius: "5px" };
     const gridStyle = {
@@ -33,7 +35,6 @@ function Dashboard() {
                     <img src={coin} alt="Coin" style={imageStyle} />
                     <img src={ladder} alt="Ladder" style={imageStyle} />
                 </div>
-
         </div>
     );
 }
