@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import banner from "../assets/banner.jpg";
-import Footer from "./Footer";
-
+import Footer from "../components/Footer";
 const Hero = () => {
     const heroStyle = {
         minHeight: "100vh",
@@ -16,6 +15,26 @@ const Hero = () => {
         padding: "20px",
         backgroundSize: "cover",
         backgroundPosition: "center",
+    };
+     const faqStyle = {
+        maxWidth: "800px",
+        width: "100%",
+        marginTop: "40px",
+        background: "rgba(54, 9, 234, 0.08)",
+        borderRadius: "15px",
+        padding: "25px",
+        color: "#15112b",
+        boxShadow: "0 10px 40px rgba(0, 0, 0, 0.25)",
+    };
+    const faqItem = {
+        textAlign: "left",
+        marginBottom: "18px",
+        lineHeight: "1.6",
+    };
+    const faqTitle = {
+        fontSize: "20px",
+        marginBottom: "10px",
+        color: "gold",
     };
     const buttonContainer = {
         display: "flex",
@@ -39,27 +58,7 @@ const Hero = () => {
         backgroundColor: "white",
         margin: "0 10px",
     };
-    const faqStyle = {
-        maxWidth: "800px",
-        width: "100%",
-        marginTop: "40px",
-        background: "rgba(54, 9, 234, 0.08)",
-        borderRadius: "15px",
-        padding: "25px",
-        color: "#15112b",
-        boxShadow: "0 10px 40px rgba(0, 0, 0, 0.25)",
-    };
-    const faqItem = {
-        textAlign: "left",
-        marginBottom: "18px",
-        lineHeight: "1.6",
-    };
-    const faqTitle = {
-        fontSize: "20px",
-        marginBottom: "10px",
-        color: "gold",
-    };
-    
+   
     const ButtonStyle = {
         padding: "10px 20px",
         backgroundColor:"gold",
@@ -86,24 +85,26 @@ const Hero = () => {
               <Link to="/login" style={ButtonStyle}>Login</Link>
           </div>   
       </div>
-      <section style={faqStyle}>
-          <h2 style={faqTitle}>FAQ</h2>
-          <div style={faqItem}>
-              <strong>What is FundFlow DAO?</strong>
-              <p>FundFlow DAO is a decentralized community platform that helps small businesses get funding through transparent voting and support. Enterprenuers write small business proposals and the communities evaluate the ideas and vote for them. </p>
-          </div>
-          <div style={faqItem}>
-              <strong>How FUNDFLOW works?</strong>
-              <p>Enterprenuers submit small business proposals, and the community evaluates them through transparent voting. Successful proposals receive funding from the DAO's treasury.
-              </p>
-          </div>
-          <div style={faqItem}>
-              <strong>What makes FUNDFLOW DAO different?</strong>
-              <p>FundFlow DAO stands out by providing a transparent and community-driven approach to funding small businesses. Unlike traditional funding methods, our platform allows the community to directly participate in the decision-making process, ensuring that the most promising ideas receive support.</p>
-          </div>
-      </section>
-      <Footer />
-    </>
+       <section style={faqStyle}>
+                <h2 style={faqTitle}>FAQ</h2>
+                <div style={faqItem}>
+                    <strong>What is FundFlow DAO?</strong>
+                    <p>FundFlow DAO is a decentralized community platform that helps small businesses get funding through transparent voting and support. Enterprenuers write small business proposals and the communities evaluate the ideas and vote for them. </p>
+                </div>
+                <div style={faqItem}>
+                    <strong>How FUNDFLOW works?</strong>
+                    <p>Enterprenuers submit small business proposals, and the community evaluates them through transparent voting. Successful proposals receive funding from the DAO's treasury.
+                    </p>
+                </div>
+                <div style={faqItem}>
+                    <strong>What makes FUNDFLOW DAO different?</strong>
+                    <p>FundFlow DAO stands out by providing a transparent and community-driven approach to funding small businesses. Unlike traditional funding methods, our platform allows the community to directly participate in the decision-making process, ensuring that the most promising ideas receive support.</p>
+                </div>
+            </section>
+            <Footer />
+    
+        
+        </>
   );
 }
 export default Hero;
