@@ -42,6 +42,20 @@ const errorInputStyle = `
   .toggle-password:hover {
     color: #333;
   }
+  @media (max-width: 768px) {
+    form {
+      padding: 15px !important;
+      max-width: 90% !important;
+    }
+    input, select {
+      font-size: 16px !important;
+      padding: 8px !important;
+    }
+    button {
+      font-size: 14px !important;
+      padding: 8px 15px !important;
+    }
+  }
 `;
 
 function Registration(){
@@ -54,9 +68,11 @@ function Registration(){
         justifyContent: "center",
         alignItems: "center",
         background: "linear-gradient(135deg, #111, #333)",
+        borderRadius: "15px",
+        padding: "20px",
     };
     const cardStyle = {
-        backgroundColor: "#1c1135",
+        backgroundColor: "#000000",
         padding: "20px",
         borderRadius: "10px",
         boxShadow: "0 0 10px rgba(231, 225, 217, 0.94)",
@@ -64,6 +80,13 @@ function Registration(){
         maxWidth: "400px",
         color:"white",
         fontFamily: "Arial, sans-serif",
+        overflowX: "hidden",
+        boxSizing: "border-box",
+    };
+    const mobileCardStyle = {
+        ...cardStyle,
+        maxWidth: "calc(100% - 20px)",
+        padding: "15px",
     };
     const [formData, setFormData] = useState({
         firstname:"John",
@@ -88,6 +111,10 @@ function Registration(){
         cursor: "pointer",
         color: "black",
     };
+    
+    // Responsive styling
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+    const responsiveCardStyle = isMobile ? mobileCardStyle : cardStyle;
 
     useEffect(() => {
       let mounted = true;
@@ -215,7 +242,7 @@ const handleCountryChange = (e) => {
         <section style={heroStyle}>
              <style>{errorInputStyle}</style>
              <h2 style={{textAlign:"center",color:"blue"}}>Register</h2>
-            <form style={cardStyle} onSubmit={handleSubmit} noValidate>
+            <form style={typeof window !== "undefined" && window.innerWidth <= 768 ? mobileCardStyle : cardStyle} onSubmit={handleSubmit} noValidate>
                <input type="text" name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleChange} style={inputStyle} required />
                <input type="text" name="lastname" placeholder="Last Name" value={formData.lastname} onChange={handleChange} style={inputStyle} required />
                 <select name="country" value={formData.country} onChange={handleCountryChange} style={inputStyle} required>
