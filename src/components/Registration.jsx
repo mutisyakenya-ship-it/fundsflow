@@ -1,9 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { loadCountries, getCode } from "../data/countries";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-  function Registration(){
+
+const errorInputStyle = `
+  input.error-input::placeholder {
+    color: #ff6b6b;
+    opacity: 1;
+  }
+  input.error-input:-ms-input-placeholder {
+    color: #ff6b6b;
+  }
+  input.error-input::-ms-input-placeholder {
+    color: #ff6b6b;
+  }
+  .password-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .password-input {
+    padding-right: 40px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: none;
+    padding: 0;
+    color: black;
+  }
+  .toggle-password:hover {
+    color: #333;
+  }
+`;
+
+function Registration(){
     const { register } = useAuth();
     const navigate = useNavigate();
     const heroStyle = {
@@ -25,8 +66,8 @@ import "react-phone-input-2/lib/style.css";
         fontFamily: "Arial, sans-serif",
     };
     const [formData, setFormData] = useState({
-        firstname:"",
-        lastname:"",
+        firstname:"John",
+        lastname:"Doe",
         country:"",
         phone:"",
         username:"",
@@ -34,223 +75,33 @@ import "react-phone-input-2/lib/style.css";
         password:"",
         confirmPassword:""
     });
-    const country = [
-"Afghanistan","Albania","Algeria","Andorra","Angola","Antigua and Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan",
-"Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi",
-"Cabo Verde","Cambodia","Cameroon","Canada","Central African Republic","Chad","Chile","China","Colombia","Comoros","Congo","Costa Rica","Côte d’Ivoire","Croatia","Cuba","Cyprus","Czechia",
-"Denmark","Djibouti","Dominica","Dominican Republic",
-"Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Eswatini","Ethiopia",
-"Fiji","Finland","France",
-"Gabon","Gambia","Georgia","Germany","Ghana","Greece","Grenada","Guatemala","Guinea","Guinea-Bissau","Guyana",
-"Haiti","Holy See (Vatican City)","Honduras","Hungary",
-"Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy",
-"Jamaica","Japan","Jordan",
-"Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan",
-"Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg",
-"Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar",
-"Namibia","Nauru","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway",
-"Oman",
-"Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal",
-"Qatar",
-"Romania","Russia","Rwanda",
-"Saint Kitts and Nevis","Saint Lucia","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Sweden","Switzerland","Syria",
-"Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Tuvalu",
-"Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan",
-"Vanuatu","Venezuela","Vietnam",
-"Yemen",
-"Zambia","Zimbabwe"
-].sort((a, b) => a.localeCompare(b));
-const countryCodes = {
-  Afghanistan: "+93",
-  Albania: "+355",
-  Algeria: "+213",
-  Andorra: "+376",
-  Angola: "+244",
-  "Antigua and Barbuda": "+1-268",
-  Argentina: "+54",
-  Armenia: "+374",
-  Australia: "+61",
-  Austria: "+43",
-  Azerbaijan: "+994",
-  Bahamas: "+1-242",
-  Bahrain: "+973",
-  Bangladesh: "+880",
-  Barbados: "+1-246",
-  Belarus: "+375",
-  Belgium: "+32",
-  Belize: "+501",
-  Benin: "+229",
-  Bhutan: "+975",
-  Bolivia: "+591",
-  "Bosnia and Herzegovina": "+387",
-  Botswana: "+267",
-  Brazil: "+55",
-  Brunei: "+673",
-  Bulgaria: "+359",
-  "Burkina Faso": "+226",
-  Burundi: "+257",
-  "Cabo Verde": "+238",
-  Cambodia: "+855",
-  Cameroon: "+237",
-  Canada: "+1",
-  "Central African Republic": "+236",
-  Chad: "+235",
-  Chile: "+56",
-  China: "+86",
-  Colombia: "+57",
-  Comoros: "+269",
-  Congo: "+242",
-  "Costa Rica": "+506",
-  Croatia: "+385",
-  Cuba: "+53",
-  Cyprus: "+357",
-  Czechia: "+420",
-  Denmark: "+45",
-  Djibouti: "+253",
-  Dominica: "+1-767",
-  "Dominican Republic": "+1-809",
-  Ecuador: "+593",
-  Egypt: "+20",
-  "El Salvador": "+503",
-  "Equatorial Guinea": "+240",
-  Eritrea: "+291",
-  Estonia: "+372",
-  Eswatini: "+268",
-  Ethiopia: "+251",
-  Fiji: "+679",
-  Finland: "+358",
-  France: "+33",
-  Gabon: "+241",
-  Gambia: "+220",
-  Georgia: "+995",
-  Germany: "+49",
-  Ghana: "+233",
-  Greece: "+30",
-  Grenada: "+1-473",
-  Guatemala: "+502",
-  Guinea: "+224",
-  "Guinea-Bissau": "+245",
-  Guyana: "+592",
-  Haiti: "+509",
-  Honduras: "+504",
-  Hungary: "+36",
-  Iceland: "+354",
-  India: "+91",
-  Indonesia: "+62",
-  Iran: "+98",
-  Iraq: "+964",
-  Ireland: "+353",
-  Israel: "+972",
-  Italy: "+39",
-  Jamaica: "+1-876",
-  Japan: "+81",
-  Jordan: "+962",
-  Kazakhstan: "+7",
-  Kenya: "+254",
-  Kiribati: "+686",
-  Kuwait: "+965",
-  Kyrgyzstan: "+996",
-  Laos: "+856",
-  Latvia: "+371",
-  Lebanon: "+961",
-  Lesotho: "+266",
-  Liberia: "+231",
-  Libya: "+218",
-  Liechtenstein: "+423",
-  Lithuania: "+370",
-  Luxembourg: "+352",
-  Madagascar: "+261",
-  Malawi: "+265",
-  Malaysia: "+60",
-  Maldives: "+960",
-  Mali: "+223",
-  Malta: "+356",
-  "Marshall Islands": "+692",
-  Mauritania: "+222",
-  Mauritius: "+230",
-  Mexico: "+52",
-  Micronesia: "+691",
-  Moldova: "+373",
-  Monaco: "+377",
-  Mongolia: "+976",
-  Montenegro: "+382",
-  Morocco: "+212",
-  Mozambique: "+258",
-  Myanmar: "+95",
-  Namibia: "+264",
-  Nauru: "+674",
-  Nepal: "+977",
-  Netherlands: "+31",
-  "New Zealand": "+64",
-  Nicaragua: "+505",
-  Niger: "+227",
-  Nigeria: "+234",
-  "North Korea": "+850",
-  "North Macedonia": "+389",
-  Norway: "+47",
-  Oman: "+968",
-  Pakistan: "+92",
-  Palau: "+680",
-  Palestine: "+970",
-  Panama: "+507",
-  "Papua New Guinea": "+675",
-  Paraguay: "+595",
-  Peru: "+51",
-  Philippines: "+63",
-  Poland: "+48",
-  Portugal: "+351",
-  Qatar: "+974",
-  Romania: "+40",
-  Russia: "+7",
-  Rwanda: "+250",
-  "Saudi Arabia": "+966",
-  Senegal: "+221",
-  Serbia: "+381",
-  Seychelles: "+248",
-  "Sierra Leone": "+232",
-  Singapore: "+65",
-  Slovakia: "+421",
-  Slovenia: "+386",
-  "Solomon Islands": "+677",
-  Somalia: "+252",
-  "South Africa": "+27",
-  "South Korea": "+82",
-  "South Sudan": "+211",
-  Spain: "+34",
-  "Sri Lanka": "+94",
-  Sudan: "+249",
-  Suriname: "+597",
-  Sweden: "+46",
-  Switzerland: "+41",
-  Syria: "+963",
-  Tajikistan: "+992",
-  Tanzania: "+255",
-  Thailand: "+66",
-  "Timor-Leste": "+670",
-  Togo: "+228",
-  Tonga: "+676",
-  "Trinidad and Tobago": "+1-868",
-  Tunisia: "+216",
-  Turkey: "+90",
-  Turkmenistan: "+993",
-  Tuvalu: "+688",
-  Uganda: "+256",
-  Ukraine: "+380",
-  "United Arab Emirates": "+971",
-  "United Kingdom": "+44",
-  "United States": "+1",
-  Uruguay: "+598",
-  Uzbekistan: "+998",
-  Vanuatu: "+678",
-  Venezuela: "+58",
-  Vietnam: "+84",
-  Yemen: "+967",
-  Zambia: "+260",
-  Zimbabwe: "+263"
-};
+    const [errors, setErrors] = useState({ username: "", password: "", confirmPassword: "" });
+    const [countries, setCountries] = useState([]);
+    const [countryCodes, setCountryCodes] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const iconStyle = {
+        position: "absolute",
+        right: "10px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        cursor: "pointer",
+        color: "black",
+    };
+
+    useEffect(() => {
+      let mounted = true;
+      loadCountries().then(({ countries: list, codes }) => {
+        if (!mounted) return;
+        setCountries(list || []);
+        setCountryCodes(codes || {});
+      });
+      return () => { mounted = false; };
+    }, []);
+
 const handleCountryChange = (e) => {
     const selectedCountry = e.target.value;
-    const countryCode = countryCodes[selectedCountry] || "";
+    const countryCode = getCode(selectedCountry, countryCodes) || "";
     setFormData({
         ...formData,
         country: selectedCountry,
@@ -269,38 +120,84 @@ const handleCountryChange = (e) => {
         color: "black",
         fontSize: "16px",
     };
-    const validateUsername = (username) => { 
-     const lengthValid = username.length >= 8 && username.length <= 24;
-     const numbers = username.match(/[0-9]/g);
-     const specialCharValid = /[@$#%]/.test(username);
-     const numbersValid = !numbers || numbers.length <= 2; 
-     const underscoreValid = (username.match(/_/g) || []).length <= 1; 
-     return lengthValid && specialCharValid && numbersValid && underscoreValid; 
+    const validateUsername = (username) => {
+     if (!username) return false;
+     const lengthValid = username.length >= 6 && username.length <= 8;
+     const specialCharValid = /[^A-Za-z0-9]/.test(username); // at least one non-alphanumeric
+     const noSpaces = !/\s/.test(username);
+     return lengthValid && specialCharValid && noSpaces;
     };
 
-    const validatePassword = (password) => {
-     const lengthValid = password.length >= 8 && password.length <= 24;
-     const uppercaseValid = /[A-Z]/.test(password); 
-     const numberValid = /[0-9]/.test(password); 
-     const specialCharValid = /[@$#%]/.test(password);
-     return lengthValid && uppercaseValid && numberValid && specialCharValid;
-   };
+        const validatePassword = (password) => {
+         if (!password) return false;
+         const lengthValid = password.length >= 8 && password.length <= 24;
+         const uppercaseValid = /[A-Z]/.test(password);
+         const numberValid = /[0-9]/.test(password);
+         const specialCharValid = /[^A-Za-z0-9]/.test(password);
+         return lengthValid && uppercaseValid && numberValid && specialCharValid;
+     };
     const handleChange=(e)=>{
         setFormData({
            ...formData,
           [e.target.name]:e.target.value
         })
     };
+
+    const handleUsernameChange=(e)=>{
+        setFormData({
+           ...formData,
+          username:e.target.value
+        });
+        if (e.target.value) {
+            setErrors({...errors, username: ""});
+        }
+    };
+
+    const handlePasswordChange=(e)=>{
+        setFormData({
+           ...formData,
+          password:e.target.value
+        });
+        if (e.target.value) {
+            setErrors({...errors, password: ""});
+        }
+    };
+
+    const handleConfirmPasswordChange=(e)=>{
+        setFormData({
+           ...formData,
+          confirmPassword:e.target.value
+        });
+        if (e.target.value) {
+            setErrors({...errors, confirmPassword: ""});
+        }
+    };
     const handleSubmit = (e) => { 
          e.preventDefault(); 
-        
-     if (!validateUsername(formData.username))
-         { alert("Invalid username!"); return; }
-        else if (!validatePassword(formData.password))
-         { alert("Invalid password!"); return; }
-        else if (formData.password !== formData.confirmPassword) 
-           { alert("Passwords do not match!"); return; };
-     
+        const nextErrors = { username: "", password: "", confirmPassword: "" };
+
+     if (!validateUsername(formData.username)) {
+         nextErrors.username = "Username must be 6-8 characters and include at least one special character (no spaces).";
+     }
+     if (!validatePassword(formData.password)) {
+         nextErrors.password = "Password must be 8-24 chars, include an uppercase letter, a number, and a special character.";
+     }
+     if (formData.password !== formData.confirmPassword) {
+         nextErrors.confirmPassword = "Passwords do not match.";
+     }
+
+     if (nextErrors.username || nextErrors.password || nextErrors.confirmPassword) {
+         // Clear the error field values so error placeholder is visible
+         const clearedData = {...formData};
+         if (nextErrors.username) clearedData.username = "";
+         if (nextErrors.password) clearedData.password = "";
+         if (nextErrors.confirmPassword) clearedData.confirmPassword = "";
+         setFormData(clearedData);
+         setErrors(nextErrors);
+         return;
+     }
+
+     setErrors({ username: "", password: "", confirmPassword: "" });
      // Register user and store their data
      register({
        firstname: formData.firstname,
@@ -316,22 +213,35 @@ const handleCountryChange = (e) => {
     };
     return(
         <section style={heroStyle}>
+             <style>{errorInputStyle}</style>
              <h2 style={{textAlign:"center",color:"blue"}}>Register</h2>
-            <form style={cardStyle} onSubmit={handleSubmit}>
+            <form style={cardStyle} onSubmit={handleSubmit} noValidate>
                <input type="text" name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleChange} style={inputStyle} required />
                <input type="text" name="lastname" placeholder="Last Name" value={formData.lastname} onChange={handleChange} style={inputStyle} required />
                 <select name="country" value={formData.country} onChange={handleCountryChange} style={inputStyle} required>
                     <option value="">Select Country</option>
-                    {country.map((c) => (
+                    {countries.map((c) => (
                         <option key={c} value={c}>{c}</option>
                     ))}
                 </select>
 
                   <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={(e)=>setFormData({...formData, phone: e.target.value})} style={inputStyle} required />
-                  <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} style={inputStyle} required />
+                  <input type="text" name="username" placeholder={errors.username || "Username"} value={formData.username} onChange={handleUsernameChange} className={errors.username ? "error-input" : ""} style={{...inputStyle, borderColor: errors.username ? "#ff6b6b" : "gold", color: "black"}} required />
+                  <div style={{fontSize: "12px", color: "#ccc", marginBottom: "8px"}}>Username must be 6-8 characters and include at least one special character.</div>
                   <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} style={inputStyle} required />
-                  <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} style={inputStyle} required />
-                  <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} style={inputStyle} required />
+                  <div className="password-wrapper">
+                    <input type={showPassword ? "text" : "password"} name="password" placeholder={errors.password || "Password"} value={formData.password} onChange={handlePasswordChange} className={`password-input ${errors.password ? "error-input" : ""}`} style={{...inputStyle, borderColor: errors.password ? "#ff6b6b" : "gold", color: "black"}} required />
+                    <span onClick={() => setShowPassword(!showPassword)} className="toggle-password" style={{position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "black"}}>
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                  <div style={{fontSize: "12px", color: "#ccc", marginBottom: "8px"}}>Password must be 8-24 chars, include an uppercase letter, a number, and a special character.</div>
+                  <div className="password-wrapper">
+                    <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" placeholder={errors.confirmPassword || "Confirm Password"} value={formData.confirmPassword} onChange={handleConfirmPasswordChange} className={`password-input ${errors.confirmPassword ? "error-input" : ""}`} style={{...inputStyle, borderColor: errors.confirmPassword ? "#ff6b6b" : "gold", color: "black"}} required />
+                    <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="toggle-password" style={{position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)", cursor: "pointer", color: "black"}}>
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
 
                 <label style={{ gridColumn: "span 2", display: "flex", alignItems: "center", gap: "10px" }}>
                   <input type="checkbox" required />
@@ -354,7 +264,7 @@ const handleCountryChange = (e) => {
                     }}>
                 Create Account
                 </button>
-                <p style={{gridAutoColumns: "span 2",color:"white"}}>Already have an account? <a href="/login"><p style={{color:"gold"}}>Click here to login</p></a></p>
+                <p style={{gridAutoColumns: "span 2",color:"white"}}>Already have an account? <a href="/login" style={{color:"gold"}}>Click here to login</a></p>
             </form>
         </section>
     )
