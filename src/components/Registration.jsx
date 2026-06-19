@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { loadCountries, getCode } from "../data/countries";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -61,42 +61,19 @@ const errorInputStyle = `
 function Registration(){
     const { register } = useAuth();
     const navigate = useNavigate();
-    const heroStyle = {
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",    
-        justifyContent: "center",
-        alignItems: "center",
-        background: "linear-gradient(135deg, #111, #333)",
-        borderRadius: "15px",
-        padding: "20px",
-    };
-    const cardStyle = {
-        backgroundColor: "#000000",
-        padding: "20px",
-        borderRadius: "10px",
-        boxShadow: "0 0 10px rgba(231, 225, 217, 0.94)",
-        width: "100%",
-        maxWidth: "400px",
-        color:"white",
-        fontFamily: "Arial, sans-serif",
-        overflowX: "hidden",
-        boxSizing: "border-box",
-    };
-    const mobileCardStyle = {
-        ...cardStyle,
-        maxWidth: "calc(100% - 20px)",
-        padding: "15px",
-    };
+    const heroStyle = { minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)", padding: "30px", };
+   const cardStyle = { background: "#ffffff", padding: "35px", borderRadius: "18px", width: "100%", maxWidth: "520px", boxShadow: "0 15px 40px rgba(0,0,0,0.15)", border: "1px solid #e5e7eb", boxSizing: "border-box", };
+   const mobileCardStyle = { ...cardStyle, width: "100%", maxWidth: "95%", padding: "20px", };
     const [formData, setFormData] = useState({
-        firstname:"John",
-        lastname:"Doe",
+        firstname:"",
+        lastname:"",
         country:"",
         phone:"",
         username:"",
         email:"",
         password:"",
-        confirmPassword:""
+        confirmPassword:"",
+        role:"entrepreneur"
     });
     const [errors, setErrors] = useState({ username: "", password: "", confirmPassword: "" });
     const [countries, setCountries] = useState([]);
@@ -135,18 +112,7 @@ const handleCountryChange = (e) => {
         phone: countryCode || ""
     });
 };
-    const inputStyle = {
-        display: "block",
-        marginBottom: "10px",
-        boxSizing: "border-box",
-        padding: "5px",
-        width: "100%",  
-        border: "2px solid gold",
-        borderRadius: "5px",
-        backgroundColor: "white",
-        color: "black",
-        fontSize: "16px",
-    };
+    const inputStyle = { display: "block", width: "100%", padding: "12px", marginBottom: "12px", borderRadius: "8px", border: "1px solid #d1d5db", backgroundColor: "#fff", color: "#111827", fontSize: "15px", outline: "none", boxSizing: "border-box", transition: "0.3s", };
     const validateUsername = (username) => {
      if (!username) return false;
      const lengthValid = username.length >= 6 && username.length <= 8;
@@ -170,7 +136,7 @@ const handleCountryChange = (e) => {
         })
     };
 
-    const handleUsernameChange=(e)=>{
+    const handleUsernameChange=(e)=>{  
         setFormData({
            ...formData,
           username:e.target.value
@@ -231,20 +197,75 @@ const handleCountryChange = (e) => {
        lastname: formData.lastname,
        username: formData.username,
        email: formData.email,
+       password: formData.password,
        country: formData.country,
-       phone: formData.phone
+       phone: formData.phone,
+       role:formData.role
      });
      
      alert("Registration successful!");
-     navigate("/dashboard");
+     navigate("/login {replace:true}");
     };
     return(
-        <section style={heroStyle}>
-             <style>{errorInputStyle}</style>
-             <h2 style={{textAlign:"center",color:"blue"}}>Register</h2>
-            <form style={typeof window !== "undefined" && window.innerWidth <= 768 ? mobileCardStyle : cardStyle} onSubmit={handleSubmit} noValidate>
-               <input type="text" name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleChange} style={inputStyle} required />
-               <input type="text" name="lastname" placeholder="Last Name" value={formData.lastname} onChange={handleChange} style={inputStyle} required />
+            <section style={heroStyle}>
+  <style>{errorInputStyle}</style>
+
+  <div
+    style={{
+      textAlign: "center",
+      marginBottom: "25px",
+    }}
+  >
+    <h1
+      style={{
+        color: "gold",
+        fontSize: "38px",
+        marginBottom: "8px",
+        fontWeight: "bold",
+      }}
+    >
+      FundsFlow DAO
+    </h1>
+
+    <p
+      style={{
+        color: "#f3f4f6",
+        fontSize: "16px",
+        marginBottom: "5px",
+      }}
+    >
+      Create your account
+    </p>
+
+    <p
+      style={{
+        color: "#d1d5db",
+        fontSize: "14px",
+      }}
+    >
+      Join the decentralized funding ecosystem for entrepreneurs and investors.
+    </p>
+  </div>
+
+  <form
+    style={
+      typeof window !== "undefined" && window.innerWidth <= 768
+        ? mobileCardStyle
+        : cardStyle
+    }
+    onSubmit={handleSubmit}
+    noValidate
+  >
+              <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "10px",
+  }}
+>
+  {/* First Name input */}
+  {/* Last Name input */}
+</div>
                 <select name="country" value={formData.country} onChange={handleCountryChange} style={inputStyle} required>
                     <option value="">Select Country</option>
                     {countries.map((c) => (
@@ -252,7 +273,25 @@ const handleCountryChange = (e) => {
                     ))}
                 </select>
 
-                  <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={(e)=>setFormData({...formData, phone: e.target.value})} style={inputStyle} required />
+                 <PhoneInput
+  country={"ke"}
+  value={formData.phone}
+  onChange={(phone) =>
+    setFormData({
+      ...formData,
+      phone,
+    })
+  }
+  inputStyle={{
+    width: "100%",
+    height: "46px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+  }}
+  containerStyle={{
+    marginBottom: "12px",
+  }}
+/>
                   <input type="text" name="username" placeholder={errors.username || "Username"} value={formData.username} onChange={handleUsernameChange} className={errors.username ? "error-input" : ""} style={{...inputStyle, borderColor: errors.username ? "#ff6b6b" : "gold", color: "black"}} required />
                   <div style={{fontSize: "12px", color: "#ccc", marginBottom: "8px"}}>Username must be 6-8 characters and include at least one special character.</div>
                   <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} style={inputStyle} required />
@@ -270,28 +309,131 @@ const handleCountryChange = (e) => {
                     </span>
                   </div>
 
-                <label style={{ gridColumn: "span 2", display: "flex", alignItems: "center", gap: "10px" }}>
+                <label style={{color:"black", gridColumn: "span 2", display: "flex", alignItems: "center", gap: "10px" }}>
                   <input type="checkbox" required />
                   I Agree to terms and condition
                 </label>
-                <button 
-                 type="submit"
-                    style={{
-                       gridColumn: "span 2",
-                       backgroundColor: "gold",
-                       color: "black",
-                       padding: "10px 20px",
-                       border: "none",
-                       borderRadius: "5px",
-                       cursor: "pointer",
-                       fontSize: "16px",
-                       textAlign: "center",
-                       alignItems: "center",
-                       justifyContent:"center"
-                    }}>
-                Create Account
-                </button>
-                <p style={{gridAutoColumns: "span 2",color:"white"}}>Already have an account? <a href="/login" style={{color:"gold"}}>Click here to login</a></p>
+                <div
+  style={{
+    marginTop: "20px",
+    marginBottom: "20px",
+  }}
+>
+  <h3
+    style={{
+      color: "#111827",
+      marginBottom: "5px",
+      textAlign: "center",
+    }}
+  >
+    Choose Your Role
+  </h3>
+
+  <p
+    style={{
+      color: "#6b7280",
+      fontSize: "14px",
+      textAlign: "center",
+      marginBottom: "20px",
+    }}
+  >
+    Select how you want to use FundsFlow DAO.
+  </p>
+
+  <div
+    style={{
+      display: "flex",
+      gap: "15px",
+      flexWrap: "wrap",
+    }}
+  >
+    {/* Entrepreneur Card */}
+
+    <label
+      style={{
+        flex: 1,
+        border:
+          formData.role === "entrepreneur"
+            ? "2px solid gold"
+            : "1px solid #d1d5db",
+        borderRadius: "12px",
+        padding: "15px",
+        cursor: "pointer",
+        background:
+          formData.role === "entrepreneur"
+            ? "#fff9e6"
+            : "#ffffff",
+      }}
+    >
+      <input
+        type="radio"
+        name="role"
+        value="entrepreneur"
+        checked={formData.role === "entrepreneur"}
+        onChange={handleChange}
+        style={{ marginBottom: "10px" }}
+      />
+
+      <h4 style={{ margin: "5px 0", color: "#111827" }}>
+         Entrepreneur
+      </h4>
+
+      <p
+        style={{
+          fontSize: "13px",
+          color: "#6b7280",
+          margin: 0,
+        }}
+      >
+        Submit startup ideas, raise funding, and manage your proposals.
+      </p>
+    </label>
+
+    {/* Investor Card */}
+
+    <label
+      style={{
+        flex: 1,
+        border:
+          formData.role === "investor"
+            ? "2px solid gold"
+            : "1px solid #d1d5db",
+        borderRadius: "12px",
+        padding: "15px",
+        cursor: "pointer",
+        background:
+          formData.role === "investor"
+            ? "#fff9e6"
+            : "#ffffff",
+      }}
+    >
+      <input
+        type="radio"
+        name="role"
+        value="investor"
+        checked={formData.role === "investor"}
+        onChange={handleChange}
+        style={{ marginBottom: "10px" }}
+      />
+
+      <h4 style={{ margin: "5px 0", color: "#111827" }}>
+         Investor
+      </h4>
+
+      <p
+        style={{
+          fontSize: "13px",
+          color: "#6b7280",
+          margin: 0,
+        }}
+      >
+        Discover promising startups, vote on proposals, and invest securely.
+      </p>
+    </label>
+  </div>
+</div>
+                <button type="submit" style={{ width: "100%", padding: "14px", background: "linear-gradient(90deg,#FFD700,#F4B400)", border: "none", borderRadius: "10px", fontWeight: "bold", fontSize: "16px", cursor: "pointer", }} > Create Account </button>
+                <p style={{gridAutoColumns: "span 2",color:"white"}}>Already have an account? <Link to="/login" style={{color:"gold"}}>Click here to login</Link></p>
             </form>
         </section>
     )

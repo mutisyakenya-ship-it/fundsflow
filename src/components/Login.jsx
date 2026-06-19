@@ -13,6 +13,9 @@ const firebaseConfig = {
     messagingSenderId: "123456789012",
     appId: "1:123456789012:web:abc123def456ghi789jkl012"
 };
+//  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+//  const responsiveCardStyle = isMobile ? mobileCardStyle : cardStyle;
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -32,10 +35,9 @@ const heroStyle = {
     display: "flex",    
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(135deg, #111, #333)",
+    
 };
 const cardStyle = {
-    backgroundColor: "#10091d",
     padding: "20px",
     borderRadius: "10px",
     boxShadow: "0 0 10px rgba(255, 215, 0, 0.5)",
@@ -44,6 +46,18 @@ const cardStyle = {
     color:"black",
     fontFamily: "Arial, sans-serif",
 };
+const mobileCardStyle = {
+  ...cardStyle,
+  maxWidth: "95%",
+  padding: "15px",
+};
+
+const isMobile =
+  typeof window !== "undefined" && window.innerWidth <= 768;
+
+const responsiveCardStyle = isMobile
+  ? mobileCardStyle
+  : cardStyle;
 const inputStyle = {
     display: "block",
     marginBottom: "10px",   
@@ -97,9 +111,21 @@ const handleSubmit = (e) => {
     }
     setError(newError);
     if (Object.keys(newError).length === 0) {
-        alert("Login successful");
-        login({ email: loginData.email });
-        navigate("/dashboard");
+        const savedUser = JSON.parse(localStorage.getItem("user"));
+
+if (
+  savedUser &&
+  savedUser.email === loginData.email &&
+  savedUser.password === loginData.password
+) {
+  alert("Login successful");
+
+  login(savedUser); // includes role
+
+  navigate("/dashboard");
+} else {
+  alert("Invalid email or password");
+}
     }
 };
 
@@ -135,7 +161,7 @@ const handleGithubLogin = async () => {
 return(
    < div style={heroStyle}>
     <div style={{position: "relative"}}> 
-        <form style={cardStyle} onSubmit={handleSubmit}>
+        <form style={responsiveCardStyle} onSubmit={handleSubmit}>
             <h2 style={{textAlign:"center",color:"gold",}}>login</h2>
             <input
                 type="email"

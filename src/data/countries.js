@@ -16,8 +16,7 @@ export async function loadCountries() {
         const root = idd.root || '';
         const suffix = (idd.suffixes && idd.suffixes[0]) || '';
         code = root + (suffix || '');
-      }
-      countries.push(name);
+      } 
       codes[name] = code;
     });
     countries.sort((a, b) => a.localeCompare(b));

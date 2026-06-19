@@ -166,50 +166,7 @@ function Dashboard() {
                     </div>
                 ))}
             </div>
-            <form style={style.formContainer}>
-                <h2 style={style.heading}>Submit proposal title</h2>
-            <div style={style.formGroup}>
-                <label htmlFor="project-title">Project Title:</label>
-                <input
-                    type="text"
-                    id="project-title"
-                    name="project-title"
-                    value={submitDetails["project-title"]}
-                    onChange={(e) => setsubmitDetails({ ...submitDetails, ["project-title"]: e.target.value })}
-                />
-            </div>
-            <div style={style.formGroup}>
-                <label htmlFor="description">Description:</label>
-                <textarea
-                    id="description"
-                    name="description"
-                    value={submitDetails["description"]}
-                    onChange={(e) => setsubmitDetails({ ...submitDetails, ["description"]: e.target.value })}
-                />
-            </div>
-            <div style={style.formGroup}>
-                <label htmlFor="amount-needed">Amount Needed:</label>
-                <input
-                    type="number"
-                    id="amount-needed"
-                    name="amount-needed"
-                    value={submitDetails["amount-needed"]}
-                    onChange={(e) => setsubmitDetails({ ...submitDetails, ["amount-needed"]: e.target.value })}
-                />
-            </div>
-            <div style={style.formGroup}>
-                <label htmlFor="upload-image">Upload Image:</label>
-                <input
-                    type="file"
-                    id="upload-image"
-                    name="upload-image"
-                    accept="image/*"
-                    onChange={(e) => setsubmitDetails({ ...submitDetails, ["upload-image"]: e.target.files[0] })}
-
-                />
-            </div>
-            <button type="submit" style={style.submitButton}>Submit Proposal</button>
-        </form>
+           
              
         </div>
     );

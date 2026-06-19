@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import banner from "../assets/banner.jpg";
-import Footer from "../components/Footer";
+import Footer from "./Footer";
 const Hero = () => {
     const heroStyle = {
         minHeight: "100vh",
