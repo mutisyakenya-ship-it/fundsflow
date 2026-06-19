@@ -10,6 +10,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Footer from "./components/Footer";
 
 //  ROLE REDIRECT
 import RoleRedirect from "./components/RoleRedirect";
