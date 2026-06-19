@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
-import Dashboard from ".src/pages/Dashboard";
-import Registration from ".src/components/Registration";
-import Login from ".src/components/Login";
-import Navbar from ".src/components/Navbar";
+import Dashboard from "./pages/Dashboard";
+import Registration from "./components/Registration";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
 // import Submit from "./components/Registration";
-import Hero from ".src/components/Hero";
-import About from ".src/components/About";
-import Contact from ".src/components/Contact";
-import ProtectedRoute from ".src/components/ProtectedRoute";
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 //  ROLE REDIRECT
 import RoleRedirect from "./components/RoleRedirect";
