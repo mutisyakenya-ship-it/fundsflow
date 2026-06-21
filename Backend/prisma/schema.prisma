@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName         String
+  lastName          String
+  username          String   @unique
+  email             String   @unique
+  password          String
+  phone             String?
+  country           String?
+  profileImage      String?
+  walletAddress     String?  @unique
+  walletType        String?
+  role              Role     @default(ENTREPRENEUR)
+  emailVerified     Boolean  @default(false)
+  verificationToken String?
+  resetToken        String?
+  resetTokenExpiry  DateTime?
+  proposals         Proposal[]
+  investments       Investment[]
+  comments          Comment[]
+  votes             Vote[]
+  notifications     Notification[]
+  refreshTokens     RefreshToken[]
+  wallet            Wallet?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Proposal {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  description     String
+  category        String
+  fundingGoal     Float
+  amountRaised    Float @default(0)
+  pitchDeckUrl    String?
+  businessPlanUrl String?
+  imageUrl        String?
+  status          ProposalStatus @default(PENDING)
+  creatorId       String @db.ObjectId
+  creator         User   @relation(fields: [creatorId], references: [id])
+  investments     Investment[]
+  votes           Vote[]
+  comments        Comment[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Investment {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  investorId   String @db.ObjectId
+  investor     User   @relation(fields: [investorId], references: [id])
+  proposalId   String @db.ObjectId
+  proposal     Proposal @relation(fields: [proposalId], references: [id])
+  amount       Float
+  createdAt    DateTime @default(now())
+}
+
+model Wallet {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String @unique @db.ObjectId
+  user         User   @relation(fields: [userId], references: [id])
+  balance      Float @default(0)
+  type         String
+  transactions Transaction[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Transaction {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  walletId     String @db.ObjectId
+  wallet       Wallet @relation(fields: [walletId], references: [id])
+  amount       Float
+  type         TransactionType
+  description  String?
+  createdAt    DateTime @default(now())
+}
+
+model Vote {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  proposalId   String @db.ObjectId
+  proposal     Proposal @relation(fields: [proposalId], references: [id])
+  userId       String @db.ObjectId
+  user         User @relation(fields: [userId], references: [id])
+  vote         VoteType
+  createdAt    DateTime @default(now())
+}
+
+model Comment {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  content      String
+  proposalId   String @db.ObjectId
+  proposal     Proposal @relation(fields: [proposalId], references: [id])
+  userId       String @db.ObjectId
+  user         User @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model Notification {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  message      String
+  isRead       Boolean @default(false)
+  userId       String @db.ObjectId
+  user         User @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model RefreshToken {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  token        String @unique
+  userId       String @db.ObjectId
+  user         User @relation(fields: [userId], references: [id])
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+}
+
+enum Role {
+  ENTREPRENEUR
+  INVESTOR
+  ADMIN
+}
+
+enum ProposalStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  FUNDED
+  CLOSED
+}
+
+enum VoteType {
+  YES
+  NO
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  INVESTMENT
+  REFUND
+}
