@@ -4,7 +4,7 @@ const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Make an investment
+// invest now
 router.post('/', authenticate, async (req, res) => {
   try {
     const { proposalId, amount } = req.body;
@@ -15,7 +15,7 @@ router.post('/', authenticate, async (req, res) => {
         amount,
       },
     });
-    // 🔔 Notification trigger
+    //  Notification 
 const proposal = await prisma.proposal.findUnique({ where: { id: proposalId } });
 await prisma.notification.create({
   data: {
@@ -39,7 +39,7 @@ router.get('/me', authenticate, async (req, res) => {
     });
     res.json(investments);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'cant find any investment yet' });
   }
 });
 

@@ -18,7 +18,7 @@ router.post('/', authenticate, async (req, res) => {
     });
     res.json({ message: 'Proposal created successfully', proposal });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'make sure you fill all the fields' });
   }
 });
 
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
     const proposals = await prisma.proposal.findMany({ include: { user: true } });
     res.json(proposals);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'mo proposals yet'});
   }
 });
 

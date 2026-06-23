@@ -10,7 +10,7 @@ router.get('/me', authenticate, async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user.userId } });
     res.json(user);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'this user already exixt' });
   }
 });
 
@@ -23,7 +23,7 @@ router.put('/me', authenticate, async (req, res) => {
     });
     res.json({ message: 'Profile updated successfully', user });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'please try again after some time' });
   }
 });
 

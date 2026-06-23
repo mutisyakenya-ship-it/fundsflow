@@ -13,7 +13,7 @@ router.get('/me', authenticate, async (req, res) => {
     });
     res.json(notifications);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'check your connectivity and try again' });
   }
 });
 
@@ -27,7 +27,7 @@ router.put('/:id/read', authenticate, async (req, res) => {
     });
     res.json({ message: 'Notification marked as read', notification });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'network error'});
   }
 });
 
@@ -38,7 +38,7 @@ router.delete('/:id', authenticate, async (req, res) => {
     await prisma.notification.delete({ where: { id } }); // string ObjectId
     res.json({ message: 'Notification deleted' });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'check your connectivity' });
   }
 });
 

@@ -12,7 +12,7 @@ function authenticate(req, res, next) {
     req.user = decoded; // Attach decoded payload to request
     next(); // Continue to the route
   } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    return res.status(401).js ({ error: 'Invalid or expired token' });
   }
 }
 

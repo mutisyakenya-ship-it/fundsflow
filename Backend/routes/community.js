@@ -32,7 +32,7 @@ router.post('/comment', authenticate, async (req, res) => {
         content,
       },
     });
-    // 🔔 Notification trigger
+    //  Notification trigger
 const proposal = await prisma.proposal.findUnique({ where: { id: proposalId } });
 await prisma.notification.create({
   data: {
@@ -43,7 +43,7 @@ await prisma.notification.create({
 });
     res.json({ message: 'Comment added', comment });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'network error' });
   }
 });
 

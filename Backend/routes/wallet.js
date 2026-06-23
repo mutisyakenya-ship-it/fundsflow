@@ -7,7 +7,7 @@ const router = express.Router();
 // Connect a wallet (only once)
 router.post('/connect', authenticate, async (req, res) => {
   try {
-    const { type, externalId } = req.body; // externalId could be crypto address, bank account, etc.
+    const { type, externalId } = req.body; // eg crypto adress or bank acc
 
     // Check if user already has a wallet
     const existing = await prisma.wallet.findUnique({ where: { userId: req.user.userId } });
@@ -27,14 +27,14 @@ router.post('/connect', authenticate, async (req, res) => {
 await prisma.notification.create({
   data: {
     userId: req.user.userId,
-    message: `You connected a ${type} wallet`,
+    message: `You linked your  ${type} wallet`,
     read: false,
   },
 });
 
     res.json({ message: `Wallet of type ${type} connected`, wallet });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'check your connectivity and try again' });
   }
 });
 
@@ -47,6 +47,6 @@ router.get('/me', authenticate, async (req, res) => {
     });
     res.json(wallet);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: 'cant find this wallet. please connect your real wallet' });
   }
 });
