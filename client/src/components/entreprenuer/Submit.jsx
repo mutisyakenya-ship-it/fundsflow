@@ -1,22 +1,32 @@
 import { useState } from "react";
+import { createProposal } from "../../services/api";
 
 function Submit() {
-  const [submitDetails, setsubmitDetails] = useState({
+  const [submitDetails, setSubmitDetails] = useState({
     "project-title": "",
     description: "",
     "amount-needed": "",
     "upload-image": "",
   });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(submitDetails);
+    // Call backend API here
+    alert("Proposal submitted successfully!");
+  };
+
   return (
     <div className="submit-page">
       <div className="submit-card">
         <div className="submit-header">
           <h1 className="submit-title">Submit Your Proposal</h1>
-          <p className="submit-subtitle">Pitch your idea and attract investors</p>
+          <p className="submit-subtitle">
+            Pitch your idea and attract investors
+          </p>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="submit-form-group">
             <label className="submit-label">Project Title</label>
             <input
@@ -24,12 +34,13 @@ function Submit() {
               type="text"
               value={submitDetails["project-title"]}
               onChange={(e) =>
-                setsubmitDetails({
+                setSubmitDetails({
                   ...submitDetails,
                   "project-title": e.target.value,
                 })
               }
               placeholder="e.g. Restaurant Expansion"
+              required
             />
           </div>
 
@@ -39,12 +50,13 @@ function Submit() {
               className="submit-textarea"
               value={submitDetails.description}
               onChange={(e) =>
-                setsubmitDetails({
+                setSubmitDetails({
                   ...submitDetails,
                   description: e.target.value,
                 })
               }
               placeholder="Explain your business idea..."
+              required
             />
           </div>
 
@@ -55,12 +67,13 @@ function Submit() {
               type="number"
               value={submitDetails["amount-needed"]}
               onChange={(e) =>
-                setsubmitDetails({
+                setSubmitDetails({
                   ...submitDetails,
                   "amount-needed": e.target.value,
                 })
               }
               placeholder="e.g. 50000"
+              required
             />
           </div>
 
@@ -71,7 +84,7 @@ function Submit() {
                 type="file"
                 accept="image/*"
                 onChange={(e) =>
-                  setsubmitDetails({
+                  setSubmitDetails({
                     ...submitDetails,
                     "upload-image": e.target.files[0],
                   })

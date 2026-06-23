@@ -8,6 +8,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { investorAnalytics } from '../../services/api';
 
 export default function InvestorAnalytics() {
   // ✅ DEFINE YOUR DATA HERE

@@ -1,30 +1,21 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
+function PrivateRoute({ children, role }) {
+  const { isAuthenticated, user } = useAuth();
 
-  if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        fontSize: '20px',
-        color: 'white',
-        background: 'linear-gradient(135deg, #111, #333)'
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
+  // Not logged in → redirect to login
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
-  return children;
-};
+  // Role-based protection (optional)
+  if (role && user?.role !== role) {
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-export default ProtectedRoute;
+  // Otherwise render the protected component
+  return children;
+}
+
+export default PrivateRoute;

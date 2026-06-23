@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import InvestorProfile from "./InvestorProfile";
 import BrowseProposals from "./BrowseProposal";
 import Investment from "./Investment";
@@ -18,105 +17,56 @@ export default function InvestorDashboard() {
   const menuItem = (label, tab) => (
     <button
       onClick={() => setActiveTab(tab)}
-      style={{
-        width: "100%",
-        textAlign: "left",
-        padding: "12px 14px",
-        marginBottom: "8px",
-        borderRadius: "10px",
-        border: "none",
-        cursor: "pointer",
-        background: activeTab === tab ? "#111827" : "transparent",
-        color: activeTab === tab ? "white" : "#374151",
-        fontWeight: activeTab === tab ? "600" : "400",
-      }}
+      className={`sidebar-item ${activeTab === tab ? "active" : ""}`}
     >
       {label}
     </button>
   );
 
-  const cardStyle = {
-    background: "white",
-    padding: "20px",
-    borderRadius: "14px",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.06)",
-  };
-
   const renderOverview = () => (
     <div>
       {/* HEADER */}
-      <div style={{ marginBottom: "20px" }}>
-        <h1 style={{ fontSize: "24px", fontWeight: "700" }}>
-          Investor Dashboard
-        </h1>
-        <p style={{ color: "#6b7280" }}>
-          Track your investments, returns, and opportunities
-        </p>
+      <div className="profile-header">
+        <div>
+          <h1>Investor Dashboard</h1>
+          <p className="text-gray">
+            Track your investments, returns, and opportunities
+          </p>
+        </div>
       </div>
 
       {/* STATS */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "16px",
-        }}
-      >
-        <div style={cardStyle}>
-          <h2 style={{ fontSize: "28px", margin: 0 }}>
-            ${stats.portfolio}
-          </h2>
-          <p style={{ color: "#6b7280" }}>Total Portfolio Value</p>
+      <div className="dashboard-grid">
+        <div className="stat-card">
+          <h2>${stats.portfolio}</h2>
+          <p className="text-gray">Total Portfolio Value</p>
         </div>
-
-        <div style={cardStyle}>
-          <h2 style={{ fontSize: "28px", margin: 0 }}>
-            {stats.activeInvestments}
-          </h2>
-          <p style={{ color: "#6b7280" }}>Active Investments</p>
+        <div className="stat-card">
+          <h2>{stats.activeInvestments}</h2>
+          <p className="text-gray">Active Investments</p>
         </div>
-
-        <div style={cardStyle}>
-          <h2 style={{ fontSize: "28px", margin: 0 }}>
-            {stats.roi}%
-          </h2>
-          <p style={{ color: "#6b7280" }}>Return on Investment</p>
+        <div className="stat-card">
+          <h2>{stats.roi}%</h2>
+          <p className="text-gray">Return on Investment</p>
         </div>
       </div>
 
-      {/* EMPTY STATE (IMPORTANT FIX) */}
-      <div
-        style={{
-          marginTop: "25px",
-          padding: "25px",
-          background: "#f9fafb",
-          borderRadius: "14px",
-          textAlign: "center",
-        }}
-      >
-        <h3 style={{ marginBottom: "10px" }}>Quick Insight</h3>
-        <p style={{ color: "#6b7280" }}>
+      {/* EMPTY STATE */}
+      <div className="entrepreneur-empty-box">
+        <h3>Quick Insight</h3>
+        <p className="text-gray">
           No investments yet. Start browsing startups to build your portfolio.
         </p>
-
         <button
           onClick={() => setActiveTab("browse")}
-          style={{
-            marginTop: "12px",
-            padding: "10px 16px",
-            borderRadius: "10px",
-            border: "none",
-            background: "#111827",
-            color: "white",
-            cursor: "pointer",
-          }}
+          className="entrepreneur-btn"
         >
           Browse Startups
         </button>
       </div>
     </div>
   );
-  // renderring the sidebar content
+
   const renderContent = () => {
     switch (activeTab) {
       case "profile":
@@ -135,19 +85,10 @@ export default function InvestorDashboard() {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#f3f4f6" }}>
-      
+    <div className="panel-page">
       {/* SIDEBAR */}
-      <div
-        style={{
-          width: "260px",
-          background: "white",
-          padding: "20px",
-          borderRight: "1px solid #e5e7eb",
-        }}
-      >
-        <h2 style={{ marginBottom: "20px" }}>Investor Panel</h2>
-
+      <div className="sidebar">
+        <h2 className="sidebar-title">Investor Panel</h2>
         {menuItem("Overview", "overview")}
         {menuItem("Profile", "profile")}
         {menuItem("Browse Startups", "browse")}
@@ -157,7 +98,7 @@ export default function InvestorDashboard() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div style={{ flex: 1, padding: "25px" }}>{renderContent()}</div>
+      <div className="panel-content">{renderContent()}</div>
     </div>
   );
 }

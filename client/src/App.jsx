@@ -15,7 +15,7 @@ import Footer from "./components/Footer";
 //  ROLE REDIRECT
 import RoleRedirect from "./components/RoleRedirect";
 
-// 👤 INVESTOR IMPORTS
+//  INVESTOR IMPORTS
 import InvestorDashboard from "./components/investor/InvestorDashboard";
 import InvestorProfile from "./components/investor/InvestorProfile";
 import BrowseProposals from "./components/investor/BrowseProposal";
@@ -23,7 +23,7 @@ import Investment from "./components/investor/Investment";
 import InvestorWallet from "./components/investor/Wallet";
 import InvestorAnalytics from "./components/investor/InvestorAnalytics";
 
-//  ENTREPRENEUR IMPORTS
+//  ENTREPRENUR IMPORTS
 import EntrepreneurDashboard from "./components/entreprenuer/EntrepreneurDashboard";
 import EntrepreneurProfile from "./components/entreprenuer/EntrepreneurProfile";
 import MyProposals from "./components/entreprenuer/MyProposals";
@@ -41,7 +41,7 @@ function AppContent() {
 
       <Routes>
 
-        {/* ================= LANDING ================= */}
+        {/*  HOMEPAGE  */}
         <Route
           path="/"
           element={
@@ -49,11 +49,11 @@ function AppContent() {
           }
         />
 
-        {/* ================= AUTH ================= */}
+        {/*  AUTHENTICATE  */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
 
-        {/* ================= ROLE REDIRECT ================= */}
+        {/*ROLE REDIRECT  */}
         <Route
           path="/dashboard"
           element={
@@ -63,7 +63,7 @@ function AppContent() {
           }
         />
 
-        {/* ================= GENERAL PAGES ================= */}
+        {/* GENERAL PAGES */}
         <Route
           path="/submit"
           element={
@@ -146,7 +146,7 @@ function AppContent() {
           }
         />
 
-        {/* ================= ENTREPRENEUR ROUTES ================= */}
+        {/*ENTREPRENEUR ROUTES  */}
         <Route
           path="/entrepreneur/dashboard"
           element={
@@ -198,7 +198,7 @@ function AppContent() {
           }
         />
 
-        {/* ================= FALLBACK ================= */}
+        {/*FALLBACK */}
         <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>

@@ -150,7 +150,7 @@ function Login() {
             />
             Remember Me
           </label>
-          <p className="text-right">
+          <p className="text-right color-black">
             <a href="/forgot-password" className="login-forgot-link">
               Forgot Password?
             </a>

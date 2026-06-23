@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { browseProposals } from '../../services/api';
 
 export default function BrowseProposals() {
   const [filter, setFilter] = useState("all");

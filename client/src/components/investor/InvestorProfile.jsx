@@ -1,3 +1,5 @@
+import { investorProfile } from "../../services/api";
+
 export default function InvestorProfile() {
   return (
     <div className="panel-page">
@@ -16,6 +18,7 @@ export default function InvestorProfile() {
       </div>
 
       <div className="profile-grid">
+        {/* Personal Information */}
         <div className="profile-card">
           <h2 className="profile-card-title">Personal Information</h2>
           <input className="profile-input" placeholder="Full Name" />
@@ -25,6 +28,7 @@ export default function InvestorProfile() {
           <button className="btn-profile-primary">Save Information</button>
         </div>
 
+        {/* Investment Preferences */}
         <div className="profile-card">
           <h2 className="profile-card-title">Investment Preferences</h2>
           <select className="profile-input">
@@ -44,17 +48,23 @@ export default function InvestorProfile() {
           <button className="btn-profile-primary">Save Preferences</button>
         </div>
 
+        {/* Identity Verification */}
         <div className="profile-card">
           <h2 className="profile-card-title">Identity Verification (KYC)</h2>
-          <p className="profile-text">Required to unlock investing and withdrawals.</p>
+          <p className="profile-text">
+            Required to unlock investing and withdrawals.
+          </p>
           <input className="profile-input" placeholder="ID Number" />
           <input className="profile-input" type="file" />
           <button className="btn-profile-blue">Submit Verification</button>
         </div>
 
+        {/* Wallet Connection */}
         <div className="profile-card">
           <h2 className="profile-card-title">Wallet Connection</h2>
-          <p className="profile-text">Connect your wallet to fund investments securely.</p>
+          <p className="profile-text">
+            Connect your wallet to fund investments securely.
+          </p>
           <button className="btn-profile-purple">Connect Wallet</button>
         </div>
       </div>
