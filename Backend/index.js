@@ -14,6 +14,11 @@ app.use(express.json());
 const { logger } = require('./middleware/logger');
 app.use(logger);
 
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);

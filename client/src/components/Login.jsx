@@ -55,7 +55,7 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newError = {};
     if (!validatePassword(loginData.password)) {
@@ -67,18 +67,12 @@ function Login() {
     }
     setError(newError);
     if (Object.keys(newError).length === 0) {
-      const savedUser = JSON.parse(localStorage.getItem("user"));
-
-      if (
-        savedUser &&
-        savedUser.email === loginData.email &&
-        savedUser.password === loginData.password
-      ) {
-        alert("Login successful");
-        login(savedUser);
+      try {
+        await login({ email: loginData.email, password: loginData.password });
         navigate("/dashboard");
-      } else {
-        alert("Invalid email or password");
+      } catch (err) {
+        console.error('Login error', err);
+        alert(err?.response?.data?.error || err?.message || 'Invalid email or password');
       }
     }
   };

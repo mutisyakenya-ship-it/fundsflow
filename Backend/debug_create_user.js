@@ -4,11 +4,12 @@ const bcrypt = require('bcrypt');
 (async () => {
   try {
     const hashed = await bcrypt.hash('pass1234', 10);
+    const uniq = Date.now();
     const data = {
       firstName: 'ScriptDebug',
       lastName: 'User',
-      username: 'scriptdebuguser',
-      email: 'scriptdebug+1@example.com',
+      username: `scriptdebuguser_${uniq}`,
+      email: `scriptdebug+${uniq}@example.com`,
       password: hashed,
       role: 'INVESTOR',
       country: 'US',
