@@ -17,7 +17,7 @@ model User {
   phone             String?
   country           String?
   profileImage      String?
-  walletAddress     String?  @unique
+  walletAddress     String?
   walletType        String?
   role              Role     @default(ENTREPRENEUR)
   emailVerified     Boolean  @default(false)

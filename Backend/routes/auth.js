@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const prisma = require('../prisma');
+const { prisma } = require('../prisma');
 
 const router = express.Router();
 
@@ -21,18 +21,18 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 20);
 
     // Create user
-    const user = await prisma.user.create({
-      data: {
-        firstName,
-        lastName,
-        username,
-        email,
-        password: hashedPassword,
-        role: normalizedRole,
-        country,
-        phone: phoneNumber
-      }
-    });
+    const createData = {
+      firstName,
+      lastName,
+      username,
+      email,
+      password: hashedPassword,
+      role: normalizedRole,
+      country,
+      phone: phoneNumber
+    };
+    console.log('Creating user with data:', createData);
+    const user = await prisma.user.create({ data: createData });
 
     res.status(201).json({ message: 'Signup successful', user });
   } catch (err) {
