@@ -1,27 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  FacebookAuthProvider,
-  GithubAuthProvider,
-} from "firebase/auth";
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD9A2V4V5X8X8X8X8X8X8X8X8X8X8X8X8",
-  authDomain: "funflow-abc123.firebaseapp.com",
-  projectId: "funflow-abc123",
-  storageBucket: "funflow-abc123.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abc123def456ghi789jkl012",
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
 function Login() {
   const { login } = useAuth();
@@ -77,36 +57,6 @@ function Login() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, new GoogleAuthProvider());
-      login({ email: result.user.email, name: result.user.displayName });
-      navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleFacebookLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, new FacebookAuthProvider());
-      login({ email: result.user.email, name: result.user.displayName });
-      navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleGithubLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, new GithubAuthProvider());
-      login({ email: result.user.email, name: result.user.displayName });
-      navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
     <div className="login-hero">
       <div className="login-wrapper">
@@ -152,15 +102,9 @@ function Login() {
           <button type="submit" className="btn-sign-in">
             sign in
           </button>
-          <button type="button" onClick={handleGoogleLogin} className="btn-social">
-            Login with Google
-          </button>
-          <button type="button" onClick={handleFacebookLogin} className="btn-social">
-            Login with Facebook
-          </button>
-          <button type="button" onClick={handleGithubLogin} className="btn-social">
-            Login with Github
-          </button>
+          <p className="login-signup-text">
+            Don't have an account? <Link to="/register">Sign up</Link>
+          </p>
         </form>
       </div>
     </div>

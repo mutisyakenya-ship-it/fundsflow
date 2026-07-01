@@ -10,12 +10,14 @@ export default function RoleRedirect() {
     return <Navigate to="/login" />;
   }
 
-  // redirect based on role
-  if (user.role === "investor") {
+  // redirect based on role (case-insensitive)
+  const normalizedRole = user.role?.toLowerCase();
+
+  if (normalizedRole === "investor") {
     return <Navigate to="/investor/dashboard" />;
   }
 
-  if (user.role === "entrepreneur") {
+  if (normalizedRole === "entrepreneur") {
     return <Navigate to="/entrepreneur/dashboard" />;
   }
 
