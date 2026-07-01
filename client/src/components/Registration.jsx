@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 
 function Registration() {
-  const { register,} = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstname: "",
@@ -118,7 +118,7 @@ function Registration() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = { username: "", password: "", confirmPassword: "" };
 
@@ -146,25 +146,29 @@ function Registration() {
 
     setErrors({ username: "", password: "", confirmPassword: "" });
     setLoading(true);
+    try {
+      const data = await register({
+        firstName: formData.firstname,
+        lastName: formData.lastname,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        country: formData.country,
+        phoneNumber: formData.phone,
+        role: formData.role.toUpperCase(),
+      });
 
-register({
-  firstname: formData.firstname,
-  lastname: formData.lastname,
-  username: formData.username,
-  email: formData.email,
-  password: formData.password,
-  country: formData.country,
-  phone: formData.phone,
-  role: formData.role,
-});
-
-setTimeout(() => {
-  setLoading(false);
-
-  alert("Registration successful!");
-
-  navigate("/login", { replace: true });
-}, 1000);};
+      console.log("Registration response:", data);
+      alert("Registration successful!");
+      setLoading(false);
+      navigate("/login");
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error || error?.message || "Registration failed";
+      console.error("Registration error:", error);
+      alert(errorMessage);
+      setLoading(false);
+    }
+  };
 
   const fieldBorderClass = (hasError) =>
     hasError ? "form-input form-input--error" : "form-input form-input--gold";
@@ -361,8 +365,5 @@ setTimeout(() => {
       </form>
     </section>
   );
-
- 
 }
-
 export default Registration;

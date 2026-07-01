@@ -35,15 +35,21 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     try {
-      const res = await api.post("/auth/register", userData);
+      const res = await api.post("/auth/signup", userData);
       const { token, user } = res.data;
 
-      setIsAuthenticated(true);
       setUser(user);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("isAuthenticated", "true");
+      if (token) {
+        setIsAuthenticated(true);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("isAuthenticated", "true");
+      } else {
+        setIsAuthenticated(false);
+      }
+
+      return res.data;
     } finally {
       setLoading(false);
     }

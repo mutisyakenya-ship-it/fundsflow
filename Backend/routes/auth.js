@@ -8,6 +8,7 @@ const router = express.Router();
 // Signup route
 router.post('/signup', async (req, res) => {
   const { firstName, lastName, username, email, password, role, country, phoneNumber } = req.body;
+  const normalizedRole = role?.toUpperCase() === 'INVESTOR' ? 'INVESTOR' : 'ENTREPRENEUR';
 
   try {
     // Check if email already exists
@@ -27,9 +28,9 @@ router.post('/signup', async (req, res) => {
         username,
         email,
         password: hashedPassword,
-        role,          // client chooses role
+        role: normalizedRole,
         country,
-        phoneNumber
+        phone: phoneNumber
       }
     });
 
